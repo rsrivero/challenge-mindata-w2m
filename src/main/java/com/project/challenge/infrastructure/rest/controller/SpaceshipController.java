@@ -23,6 +23,8 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.PutMapping;
 
+import java.util.List;
+
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @RestController
@@ -71,11 +73,15 @@ public class SpaceshipController {
     }
 
     @GetMapping
-    public Page<SpaceshipDTOResponse> findAll(Pageable pageable,
-                                              @RequestParam(required = false) String name) {
-        var spaceships = spaceshipFinderService.findAll(pageable, name);
+    public Page<SpaceshipDTOResponse> findAll(Pageable pageable) {
+        var spaceships = spaceshipFinderService.findAll(pageable);
 
         return spaceships.map(spaceshipMapper::toResponse);
     }
 
+    @GetMapping("/searchByName")
+    public List<SpaceshipDTOResponse> searchByName(@RequestParam String name) {
+        var spaceships = spaceshipFinderService.searchByName(name);
+        return spaceships.stream().map(spaceshipMapper::toResponse).toList();
+    }
 }

@@ -13,6 +13,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class FindSpaceshipService {
 
@@ -41,12 +43,22 @@ public class FindSpaceshipService {
      * Spaceship Search with Specification
      *
      * @param pageable
-     * @param name
      * @return Page<SpaceshipDTO>
      */
-    public Page<SpaceshipDTO> findAll(Pageable pageable, String name) {
-        Specification<Spaceship> spec = SpaceshipSpecification.getName(name);
-        var spaceships = spaceshipQueryService.findAllPaged(pageable, spec);
+    public Page<SpaceshipDTO> findAll(Pageable pageable) {
+        var spaceships = spaceshipQueryService.findAllPaged(pageable);
         return  spaceships.map(spaceshipMapper::toDTO);
+    }
+
+    /**
+     * Spaceship Search with Specification
+     *
+     * @param name
+     * @return List<SpaceshipDTO>
+     */
+    public List<SpaceshipDTO> searchByName(String name) {
+        Specification<Spaceship> spec = SpaceshipSpecification.getName(name);
+        var spaceships = spaceshipQueryService.search(spec);
+        return spaceships.stream().map(spaceshipMapper::toDTO).toList();
     }
 }

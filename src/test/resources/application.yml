@@ -1,7 +1,8 @@
 spring:
+  profile: test
   liquibase:
     change-log: classpath:liquibase/liquibase-changelog.yml
-    enabled: true
+    enabled: false
   cloud:
     aws:
       region:

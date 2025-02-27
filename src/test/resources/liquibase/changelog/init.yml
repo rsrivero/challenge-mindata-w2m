@@ -1,0 +1,11 @@
+databaseChangeLog:
+  - changeSet:
+      id: init
+      author: rodrigo.seas.rivero
+      changes:
+        - sql:
+            sql: CREATE TABLE spaceship (  id INT AUTO_INCREMENT PRIMARY KEY,  name VARCHAR(150) NOT NULL,  description VARCHAR(150) NOT NULL );
+        - sql:
+            sql: insert into spaceship(name, description) values ('Millennium Falcon','La nave de Han Solo en Star Wars.');
+        - sql:
+            sql: insert into spaceship(name, description) values ('USS Enterprise NCC-1701','La icónica nave de Star Trek.');

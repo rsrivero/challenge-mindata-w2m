@@ -43,10 +43,14 @@ public class SpaceshipCrudControllerTest {
 
     @BeforeAll
     public void setup() {
+        System.setProperty("aws.accessKeyId", "test");
+        System.setProperty("aws.secretAccessKey", "test");
+
         mockMvc = MockMvcBuilders
                 .webAppContextSetup(context)
                 .build();
     }
+
 
     @Test
     public void test_Create_Should_Create_When_CreateSpaceship() throws Exception {

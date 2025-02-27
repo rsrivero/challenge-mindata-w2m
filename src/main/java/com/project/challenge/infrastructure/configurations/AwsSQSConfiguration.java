@@ -19,6 +19,10 @@ public class AwsSQSConfiguration {
         try {
             String endpointUrl = System.getenv("AWS_ENDPOINT_URL");
 
+            if (endpointUrl == null || endpointUrl.isEmpty()) {
+                logger.warn("AWS_ENDPOINT_URL no está definido, usando un valor por defecto.");
+                endpointUrl = "http://localhost:4566";
+            }
             logger.info("Configurando SQS Client con endpoint: {}", endpointUrl);
 
             return SqsClient.builder()

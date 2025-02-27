@@ -5,13 +5,15 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface SpaceshipQueryService {
 
     Optional<Spaceship> findSpaceship(Integer id);
 
-    Page<Spaceship> findAllPaged(Pageable pageable, Specification<Spaceship> where);
+    Page<Spaceship> findAllPaged(Pageable pageable);
 
+    List<Spaceship> search(Specification<Spaceship> where);
 
 }

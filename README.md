@@ -15,8 +15,10 @@ Swagger: http://localhost:8080/swagger-ui.html
 ### 📌 Ejemplo de Consulta
 Puedes probar la API con la siguiente solicitud:
 ```http
-GET http://localhost:8080/v1/spaceship?page=0&size=1&sort=name,ASC&name=na*
-```
+curl -X 'GET' \
+  'http://localhost:8080/v1/spaceship/searchByName?name=fal' \
+  -H 'accept: */*'
+  ```
 
 ### 📌 Authentication
 The API uses basic authentication. Use the following credentials to authenticate:
@@ -24,3 +26,9 @@ The API uses basic authentication. Use the following credentials to authenticate
 Username: user
 
 Password: user123
+
+### 📌 Authentication
+Para correr los test ejecutar: (tener localstack levantado)
+```http
+mvn test
+  ```

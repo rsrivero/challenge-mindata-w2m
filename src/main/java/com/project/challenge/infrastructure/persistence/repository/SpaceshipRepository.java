@@ -10,6 +10,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -30,8 +32,11 @@ public interface SpaceshipRepository extends JpaRepository<Spaceship, Integer>,
         return ((CrudRepository<Spaceship, Integer>) this).save(spaceship);
     }
 
-    default Page<Spaceship> findAllPaged(Pageable pageable, Specification<Spaceship> where) {
-        return this.findAll(where, pageable);
+    default Page<Spaceship> findAllPaged(Pageable pageable) {
+        return this.findAll(pageable);
     }
 
+    default List<Spaceship> search(Specification<Spaceship> where) {
+        return this.findAll(where);
+    }
 }
