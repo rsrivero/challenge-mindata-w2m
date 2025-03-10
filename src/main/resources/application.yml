@@ -12,7 +12,7 @@ spring:
       messaging:
         enabled: false
       sqs:
-        endpoint: http://localhost:4566
+        endpoint: http://localstack:4566
 
 aws:
   sqs:

@@ -13,6 +13,11 @@ services:
       - LOCALSTACK_HOST=localstack
       - AWS_ACCESS_KEY_ID=test
       - AWS_SECRET_ACCESS_KEY=test
+      - INIT_SCRIPTS_PATH=/etc/localstack/init/ready.d
+    volumes:
+      - ./init-localstack.sh:/etc/localstack/init/ready.d/init-localstack.sh
+    networks:
+      - localstack_network
 
   app:
     build: .
@@ -25,3 +30,10 @@ services:
       - localstack
     ports:
       - "8080:8080"
+    networks:
+      - localstack_network
+    entrypoint: ["/bin/sh", "-c", "until curl -s http://localstack:4566/_localstack/health | grep '\"sqs\": \"running\"' > /dev/null; do echo 'Waiting for LocalStack...'; sleep 2; done; echo 'LocalStack is ready'; exec java -jar usr/app/challenge-mindata-w2m-0.0.1.jar"]
+
+networks:
+  localstack_network:
+    driver: bridge
