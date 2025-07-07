@@ -4,6 +4,7 @@ import com.project.challenge.application.adapter.SpaceshipCommandService;
 import com.project.challenge.application.adapter.SpaceshipQueryService;
 import com.project.challenge.application.exceptions.SpaceshipNotFound;
 import com.project.challenge.application.mapper.SpaceshipMapper;
+import com.project.challenge.infrastructure.mapper.SpaceshipRequestMapper;
 import com.project.challenge.service.SpaceshipRequestBuilder;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -38,21 +39,21 @@ class UpdateSpaceshipServiceTest {
     private SpaceshipMapper mapper = Mappers.getMapper(SpaceshipMapper.class);
 
     @Autowired
-    private SpaceshipMapper spaceshipMapper;
+    private SpaceshipRequestMapper spaceshipRequestMapper;
 
     private SpaceshipRequestBuilder spaceshipRequestBuilder = new SpaceshipRequestBuilder();
 
     @Test
     void update() throws SpaceshipNotFound {
-        var spaceshipRequest = spaceshipRequestBuilder.build();
-        var spaceshipEntity = spaceshipMapper.toEntity(spaceshipRequest);
+        var spaceshipDTORequest = spaceshipRequestBuilder.build();
+        var spaceshipRequest = spaceshipRequestMapper.toDomain(spaceshipDTORequest);
 
         Mockito.when(spaceshipQueryService.findSpaceship(Mockito.any()))
-                .thenReturn(Optional.ofNullable(spaceshipEntity));
+                .thenReturn(Optional.ofNullable(spaceshipRequest));
 
 
         Mockito.when(spaceShipCommandService.update(Mockito.any()))
-                .thenReturn(spaceshipEntity);
+                .thenReturn(spaceshipRequest);
 
         var spaceshipResult = updateSpaceshipService.update(1, spaceshipRequest);
 

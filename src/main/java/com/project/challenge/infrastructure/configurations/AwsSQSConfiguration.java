@@ -26,9 +26,9 @@ public class AwsSQSConfiguration {
             logger.info("Configurando SQS Client con endpoint: {}", endpointUrl);
 
             return SqsClient.builder()
-                    .credentialsProvider(DefaultCredentialsProvider.create()) // Usa credenciales de AWS
+                    .credentialsProvider(DefaultCredentialsProvider.create())
                     .region(Region.US_EAST_1)
-                    .endpointOverride(URI.create(endpointUrl)) // Usa valor por defecto si no está en env
+                    .endpointOverride(URI.create(endpointUrl))
                     .build();
         } catch (Exception e) {
             logger.error("Error al configurar el cliente SQS", e);

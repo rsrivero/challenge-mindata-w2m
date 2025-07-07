@@ -1,16 +1,16 @@
-package com.project.challenge.domain.entity;
+package com.project.challenge.infrastructure.persistence.entity;
 
 import com.project.challenge.infrastructure.persistence.SpaceshipEntityListener;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-@EntityListeners(SpaceshipEntityListener.class)  // Aquí vinculamos el listener
-@Table
+@EntityListeners(SpaceshipEntityListener.class)
+@Table(name = "SPACESHIP")
 @Entity
 @Getter
 @Setter
-public class Spaceship {
+public class SpaceshipEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;

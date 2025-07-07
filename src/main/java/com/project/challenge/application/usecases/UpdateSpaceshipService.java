@@ -5,7 +5,7 @@ import com.project.challenge.application.adapter.SpaceshipQueryService;
 import com.project.challenge.application.dto.SpaceshipDTO;
 import com.project.challenge.application.exceptions.SpaceshipNotFound;
 import com.project.challenge.application.mapper.SpaceshipMapper;
-import com.project.challenge.infrastructure.rest.request.SpaceshipDTORequest;
+import com.project.challenge.domain.model.Spaceship;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.stereotype.Service;
@@ -36,9 +36,9 @@ public class UpdateSpaceshipService {
      */
     @CachePut(value = "spaceship", key = "#id")
     @Transactional(propagation = Propagation.REQUIRED)
-    public SpaceshipDTO update(Integer id, SpaceshipDTORequest spaceshipRequest) throws SpaceshipNotFound {
+    public SpaceshipDTO update(Integer id, Spaceship spaceshipRequest) throws SpaceshipNotFound {
         var spaceship = spaceshipQueryService.findSpaceship(id).orElseThrow(SpaceshipNotFound::new);
-        var spaceshipUpdated = spaceshipMapper.updateEntity(spaceship, spaceshipRequest);
+        var spaceshipUpdated = spaceshipMapper.updateDomain(spaceship, spaceshipRequest);
         spaceshipUpdated = spaceShipCommandService.update(spaceshipUpdated);
         return spaceshipMapper.toDTO(spaceshipUpdated);
     }

@@ -2,6 +2,7 @@ package com.project.challenge.application.usecases;
 
 import com.project.challenge.application.adapter.SpaceshipCommandService;
 import com.project.challenge.application.mapper.SpaceshipMapper;
+import com.project.challenge.infrastructure.mapper.SpaceshipRequestMapper;
 import com.project.challenge.service.SpaceshipRequestBuilder;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -33,15 +34,17 @@ class SaveSpaceshipServiceTest {
     @Autowired
     private SpaceshipMapper spaceshipMapper;
 
+    @Autowired
+    private SpaceshipRequestMapper spaceshipRequestMapper;
     private SpaceshipRequestBuilder spaceshipRequestBuilder = new SpaceshipRequestBuilder();
 
     @Test
     void save() {
-        var spaceshipRequest = spaceshipRequestBuilder.build();
-        var spaceshipEntity = spaceshipMapper.toEntity(spaceshipRequest);
+        var spaceshipDTORequest = spaceshipRequestBuilder.build();
+        var spaceshipRequest = spaceshipRequestMapper.toDomain(spaceshipDTORequest);
 
         Mockito.when(spaceshipCommandService.save(Mockito.any()))
-                .thenReturn(spaceshipEntity);
+                .thenReturn(spaceshipRequest);
 
         var spaceshipResult = saveSpaceshipService.save(spaceshipRequest);
 

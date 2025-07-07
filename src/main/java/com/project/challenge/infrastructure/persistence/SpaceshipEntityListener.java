@@ -2,7 +2,7 @@ package com.project.challenge.infrastructure.persistence;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.project.challenge.domain.entity.Spaceship;
+import com.project.challenge.infrastructure.persistence.entity.SpaceshipEntity;
 import com.project.challenge.infrastructure.adapters.inbound.handlers.SpaceshipEventPublisher;
 import com.project.challenge.infrastructure.interfaces.events.dto.SpaceshipActionEvent;
 import jakarta.persistence.PostPersist;
@@ -21,17 +21,17 @@ public class SpaceshipEntityListener {
     private ObjectMapper objectMapper;
 
     @PostPersist
-    public void onPostPersist(Spaceship spaceship) throws JsonProcessingException {
+    public void onPostPersist(SpaceshipEntity spaceship) throws JsonProcessingException {
         spaceshipEventPublisher.publish(new SpaceshipActionEvent("CREATED", objectMapper.writeValueAsString(spaceship)));
     }
 
     @PostUpdate
-    public void onPostUpdate(Spaceship spaceship) throws JsonProcessingException {
+    public void onPostUpdate(SpaceshipEntity spaceship) throws JsonProcessingException {
         spaceshipEventPublisher.publish(new SpaceshipActionEvent("UPDATED", objectMapper.writeValueAsString(spaceship)));
     }
 
     @PostRemove
-    public void onPostRemove(Spaceship spaceship) throws JsonProcessingException {
+    public void onPostRemove(SpaceshipEntity spaceship) throws JsonProcessingException {
         spaceshipEventPublisher.publish(new SpaceshipActionEvent("DELETED", objectMapper.writeValueAsString(spaceship)));
     }
 }

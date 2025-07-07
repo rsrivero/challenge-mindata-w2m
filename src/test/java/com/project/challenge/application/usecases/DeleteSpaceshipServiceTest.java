@@ -4,6 +4,7 @@ import com.project.challenge.application.adapter.SpaceshipCommandService;
 import com.project.challenge.application.adapter.SpaceshipQueryService;
 import com.project.challenge.application.exceptions.SpaceshipNotFound;
 import com.project.challenge.application.mapper.SpaceshipMapper;
+import com.project.challenge.infrastructure.mapper.SpaceshipRequestMapper;
 import com.project.challenge.service.SpaceshipRequestBuilder;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -35,7 +36,7 @@ class DeleteSpaceshipServiceTest {
     private SpaceshipMapper mapper = Mappers.getMapper(SpaceshipMapper.class);
 
     @Autowired
-    private SpaceshipMapper spaceshipMapper;
+    private SpaceshipRequestMapper spaceshipRequestMapper;
 
     private final SpaceshipRequestBuilder spaceshipRequestBuilder = new SpaceshipRequestBuilder();
 
@@ -43,7 +44,7 @@ class DeleteSpaceshipServiceTest {
     @Test
     void delete() throws SpaceshipNotFound {
         var spaceshipRequest = spaceshipRequestBuilder.build();
-        var spaceshipEntity = spaceshipMapper.toEntity(spaceshipRequest);
+        var spaceshipEntity = spaceshipRequestMapper.toDomain(spaceshipRequest);
 
         Mockito.when(spaceshipQueryService.findSpaceship(1)).thenReturn(Optional.of(spaceshipEntity));
 

@@ -4,13 +4,10 @@ import com.project.challenge.application.adapter.SpaceshipQueryService;
 import com.project.challenge.application.dto.SpaceshipDTO;
 import com.project.challenge.application.exceptions.SpaceshipNotFound;
 import com.project.challenge.application.mapper.SpaceshipMapper;
-import com.project.challenge.domain.entity.Spaceship;
-import com.project.challenge.infrastructure.persistence.SpaceshipSpecification;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -57,8 +54,7 @@ public class FindSpaceshipService {
      * @return List<SpaceshipDTO>
      */
     public List<SpaceshipDTO> searchByName(String name) {
-        Specification<Spaceship> spec = SpaceshipSpecification.getName(name);
-        var spaceships = spaceshipQueryService.search(spec);
+        var spaceships = spaceshipQueryService.searchByName(name);
         return spaceships.stream().map(spaceshipMapper::toDTO).toList();
     }
 }

@@ -1,7 +1,6 @@
 package com.project.challenge.application.adapter;
 
-import com.project.challenge.domain.entity.Spaceship;
-
+import com.project.challenge.domain.model.Spaceship;
 
 public interface SpaceshipCommandService {
 

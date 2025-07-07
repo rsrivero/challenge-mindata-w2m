@@ -6,6 +6,8 @@ import com.project.challenge.application.usecases.DeleteSpaceshipService;
 import com.project.challenge.application.usecases.FindSpaceshipService;
 import com.project.challenge.application.usecases.SaveSpaceshipService;
 import com.project.challenge.application.usecases.UpdateSpaceshipService;
+import com.project.challenge.infrastructure.mapper.SpaceshipRequestMapper;
+import com.project.challenge.infrastructure.mapper.SpaceshipResponseMapper;
 import com.project.challenge.infrastructure.rest.request.SpaceshipDTORequest;
 import com.project.challenge.infrastructure.rest.response.SpaceshipDTOResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,18 +46,24 @@ public class SpaceshipController {
     private SpaceshipMapper spaceshipMapper;
 
     @Autowired
+    private SpaceshipRequestMapper requestMapper;
+
+    @Autowired
+    private SpaceshipResponseMapper responseMapper;
+
+    @Autowired
     private DeleteSpaceshipService spaceshipEliminatorService;
 
     @PostMapping(consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
     public SpaceshipDTOResponse create(@RequestBody SpaceshipDTORequest req){
-        var spaceship = saveSpaceshipService.save(req);
-        return spaceshipMapper.toResponse(spaceship);
+        var spaceship = saveSpaceshipService.save(requestMapper.toDomain(req));
+        return responseMapper.toResponse(spaceship);
     }
 
     @GetMapping("/{id}")
     public SpaceshipDTOResponse find(@PathVariable Integer id) throws SpaceshipNotFound {
         var spaceship = spaceshipFinderService.findSpaceship(id);
-        return spaceshipMapper.toResponse(spaceship);
+        return responseMapper.toResponse(spaceship);
     }
 
     @DeleteMapping("/{id}")
@@ -67,21 +75,21 @@ public class SpaceshipController {
     @PutMapping(value = "/{id}",consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
     public SpaceshipDTOResponse update(@RequestBody SpaceshipDTORequest req, @PathVariable Integer id) throws SpaceshipNotFound {
 
-        var spaceship = spaceshipUpdaterService.update(id, req);
+        var spaceship = spaceshipUpdaterService.update(id, requestMapper.toDomain(req));
 
-        return spaceshipMapper.toResponse(spaceship);
+        return responseMapper.toResponse(spaceship);
     }
 
     @GetMapping
     public Page<SpaceshipDTOResponse> findAll(Pageable pageable) {
         var spaceships = spaceshipFinderService.findAll(pageable);
 
-        return spaceships.map(spaceshipMapper::toResponse);
+        return spaceships.map(responseMapper::toResponse);
     }
 
     @GetMapping("/searchByName")
     public List<SpaceshipDTOResponse> searchByName(@RequestParam String name) {
         var spaceships = spaceshipFinderService.searchByName(name);
-        return spaceships.stream().map(spaceshipMapper::toResponse).toList();
+        return spaceships.stream().map(responseMapper::toResponse).toList();
     }
 }
