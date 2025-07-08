@@ -2,6 +2,7 @@ package com.project.challenge.infrastructure.adapters.inbound.handlers;
 
 import com.project.challenge.infrastructure.interfaces.events.dto.SpaceshipActionEvent;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import software.amazon.awssdk.services.sqs.SqsClient;
 import software.amazon.awssdk.services.sqs.model.MessageAttributeValue;
@@ -16,11 +17,13 @@ public class SpaceshipEventPublisher {
     @Autowired
     private SqsClient sqsClient;
 
+    @Value("${aws.sqs.queue-url}")
+    private String sqsUrl;
 
     public void publish(SpaceshipActionEvent event) {
 
         SendMessageRequest sendMessageRequest = SendMessageRequest.builder()
-                .queueUrl("http://sqs.us-east-1.localstack:4566/000000000000/sae1-spaceship-dev")
+                .queueUrl(sqsUrl)
                 .messageBody(event.message())
                 .messageAttributes(Map.of(
                         "action", MessageAttributeValue.builder().dataType("String").stringValue(event.action()).build()

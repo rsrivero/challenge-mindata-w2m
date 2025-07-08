@@ -53,8 +53,8 @@ public class FindSpaceshipService {
      * @param name
      * @return List<SpaceshipDTO>
      */
-    public List<SpaceshipDTO> searchByName(String name) {
-        var spaceships = spaceshipQueryService.searchByName(name);
+    public List<SpaceshipDTO> searchByName(String name, Pageable pageable) {
+        var spaceships = spaceshipQueryService.searchByName(name, pageable);
         return spaceships.stream().map(spaceshipMapper::toDTO).toList();
     }
 }

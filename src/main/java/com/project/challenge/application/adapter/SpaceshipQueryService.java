@@ -13,6 +13,6 @@ public interface SpaceshipQueryService {
 
     Page<Spaceship> findAllPaged(Pageable pageable);
 
-    List<Spaceship> searchByName(String name);
+    List<Spaceship> searchByName(String name, Pageable pageable);
 
 }

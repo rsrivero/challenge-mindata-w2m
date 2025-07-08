@@ -39,6 +39,7 @@ public class UpdateSpaceshipService {
     public SpaceshipDTO update(Integer id, Spaceship spaceshipRequest) throws SpaceshipNotFound {
         var spaceship = spaceshipQueryService.findSpaceship(id).orElseThrow(SpaceshipNotFound::new);
         var spaceshipUpdated = spaceshipMapper.updateDomain(spaceship, spaceshipRequest);
+        spaceshipUpdated.setId(id);
         spaceshipUpdated = spaceShipCommandService.update(spaceshipUpdated);
         return spaceshipMapper.toDTO(spaceshipUpdated);
     }

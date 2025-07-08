@@ -133,4 +133,39 @@ public class SpaceshipCrudControllerTest {
                 .andExpect(jsonPath("$.name", equalTo(spaceship.getName())))
                 .andExpect(jsonPath("$.description", equalTo(spaceship.getDescription())));
     }
+
+    @Test
+    public void test_FindAll_Should_ReturnPagedList() throws Exception {
+        spaceshipFactory.create();
+        spaceshipFactory.create();
+        spaceshipFactory.create();
+
+        this.mockMvc.perform(
+                        get(spaceshipPath)
+                                .param("page", "0")
+                                .param("size", "2")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.content", notNullValue()))
+                .andExpect(jsonPath("$.content.length()").value(2));
+    }
+
+    @Test
+    public void test_SearchByName_Should_ReturnFilteredList() throws Exception {
+        spaceshipFactory.create();
+
+        this.mockMvc.perform(
+                        get(spaceshipPath + "/searchByName")
+                                .param("name", "Enterprise")
+                                .param("page", "0")
+                                .param("size", "10")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].name", equalTo("USS Enterprise NCC-1701")));
+    }
+
 }

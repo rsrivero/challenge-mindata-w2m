@@ -28,6 +28,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import java.util.List;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
 
 @RestController
 @RequestMapping("/v1/spaceship")
@@ -81,6 +83,14 @@ public class SpaceshipController {
     }
 
     @GetMapping
+    @Parameter(
+            name = "pageable",
+            description = "Parámetros de paginación",
+            examples = @ExampleObject(
+                    name = "Ejemplo de paginación",
+                    value = "{\"page\":0,\"size\":10,\"sort\":\"id,asc\"}"
+            )
+    )
     public Page<SpaceshipDTOResponse> findAll(Pageable pageable) {
         var spaceships = spaceshipFinderService.findAll(pageable);
 
@@ -88,8 +98,16 @@ public class SpaceshipController {
     }
 
     @GetMapping("/searchByName")
-    public List<SpaceshipDTOResponse> searchByName(@RequestParam String name) {
-        var spaceships = spaceshipFinderService.searchByName(name);
+    @Parameter(
+            name = "pageable",
+            description = "Parámetros de paginación y ordenamiento",
+            examples = @ExampleObject(
+                    name = "Ejemplo de paginación",
+                    value = "{\"page\":0,\"size\":10,\"sort\":\"name,asc\"}"
+            )
+    )
+    public List<SpaceshipDTOResponse> searchByName(@RequestParam String name, Pageable pageable) {
+        var spaceships = spaceshipFinderService.searchByName(name,pageable);
         return spaceships.stream().map(responseMapper::toResponse).toList();
     }
 }

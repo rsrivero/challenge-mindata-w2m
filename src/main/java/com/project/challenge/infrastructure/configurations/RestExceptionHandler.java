@@ -6,7 +6,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -22,16 +21,9 @@ import java.util.stream.Collectors;
 public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(SpaceshipNotFound.class)
-    protected ResponseEntity<Object> handleSpaceshipNotFound(SpaceshipNotFound ex, WebRequest request) {
+    protected ResponseEntity<Map<String, Object>> handleSpaceshipNotFound(SpaceshipNotFound ex, WebRequest request) {
         log.warn("Spaceship not found: {}", ex.getMessage());
         return buildResponse(HttpStatus.NOT_FOUND, "Spaceship not found", "The requested spaceship does not exist");
-    }
-
-    @Override
-    protected ResponseEntity<Object> handleHttpMessageNotReadable(
-            HttpMessageNotReadableException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
-        log.error("Malformed JSON request: {}", ex.getMessage());
-        return buildResponse(status, "Malformed JSON request", ex.getMessage());
     }
 
     @Override
@@ -49,7 +41,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         ), headers, status);
     }
 
-    private ResponseEntity<Object> buildResponse(HttpStatusCode status, String message, String error) {
+    private ResponseEntity<Map<String, Object>> buildResponse(HttpStatusCode status, String message, String error) {
         return ResponseEntity.status(status).body(Map.of(
                 "message", message,
                 "error", error,

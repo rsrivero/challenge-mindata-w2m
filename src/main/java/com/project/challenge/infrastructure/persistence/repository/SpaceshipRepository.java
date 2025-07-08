@@ -40,10 +40,10 @@ public interface SpaceshipRepository extends JpaRepository<SpaceshipEntity, Inte
         return this.findAll(pageable).map(SpaceshipDomainMapper::toDomain);
     }
 
-    default List<Spaceship> searchByName(String name) {
+    default List<Spaceship> searchByName(String name, Pageable pageable) {
         Specification<SpaceshipEntity> spec = SpaceshipSpecification.getName(name);
 
-        return this.findAll(spec)
+        return this.findAll(spec, pageable)
                 .stream()
                 .map(SpaceshipDomainMapper::toDomain)
                 .toList();
